@@ -4,6 +4,8 @@ import (
 	"chapter3"
 	"encoding/json"
 	"fmt"
+	"io"
+	"net/http"
 	"oops"
 	"os"
 	"sync"
@@ -15,10 +17,19 @@ var lock sync.Mutex
 var waitGroup sync.WaitGroup
 
 func main() {
-	array := []int{3, 4, 5, 6}
-	PrintIntArray(array)
-	TestArray(array)
-	PrintIntArray(array)
+	for {
+		TestHttpClient()
+		time.Sleep(1 * time.Second)
+	}
+}
+
+func TestHttpClient() {
+	resp, error := http.Get("http://www.baidu.com")
+	if error != nil {
+		fmt.Printf("error %s\n", error)
+		return
+	}
+	io.Copy(os.Stdout, resp.Body)
 }
 
 func TestArray(array []int) {
