@@ -8,6 +8,8 @@ import (
 	"net/http"
 	"oops"
 	"os"
+	"runtime"
+	"strconv"
 	"sync"
 	"time"
 )
@@ -15,12 +17,146 @@ import (
 var count int
 var lock sync.Mutex
 var waitGroup sync.WaitGroup
+var c, python, java bool
 
 func main() {
-	for {
-		TestHttpClient()
-		time.Sleep(1 * time.Second)
+	xiaohui := &Dog{}
+	xiaohui.Age = 15
+	xiaohui.Name = "xiaohui"
+	fmt.Println("xiaohui: ", *xiaohui)
+}
+
+type Annimal struct {
+	Name string
+}
+
+type Dog struct {
+	Annimal
+	Age int
+}
+
+type GxfInt int
+
+func (gxfInt *GxfInt) ChangeGxfIntValue() {
+	(*gxfInt)++
+}
+
+func TestSayHi() {
+	s := &Student{
+		Name: "guanxiangfei",
+		Age:  18,
 	}
+	s1 := Student{
+		Name: "guanxiangfei",
+		Age:  18,
+	}
+	fmt.Println("address of s = ", s)
+	fmt.Println("*s = ", *s)
+	fmt.Println("s1 = ", s1)
+	s.SayHi("morning~")
+	s1.SayHi("evening~")
+	fmt.Println("*s = ", *s)
+	fmt.Println("s1 = ", s1)
+}
+
+func TestPoint() {
+	count := 0
+	var i *int = &count
+	var count1 int = count
+	*i = 1
+	fmt.Println("i = ", i)
+	fmt.Println("count1 = ", count1)
+	count1 = 2
+	fmt.Println("count = ", count)
+}
+
+type Student struct {
+	Name string
+	Age  int
+}
+
+func (s *Student) SayHi(message string) {
+	fmt.Println("hello name = ", s.Name, ", age = ", s.Age, " ", message)
+	s.Age++
+}
+
+func TestSlice() {
+	s := make([]int, 5, 10)
+	for i := 0; i < len(s); i++ {
+		s[i] = i
+	}
+	fmt.Println("cap(s) = ", cap(s))
+	for i := 1; i < 5; i++ {
+		s = append(s, 1, 2, 3)
+		fmt.Println("s = ", s)
+	}
+	fmt.Println("cap(s) = ", cap(s))
+	for i := 0; i < len(s); i++ {
+		fmt.Print(s[i], " ")
+	}
+	fmt.Println()
+}
+
+func TestCap() {
+	mySlice := make([]int, 5, 20)
+
+	fmt.Println("len(mySlice):", len(mySlice))
+	fmt.Println("cap(mySlice):", cap(mySlice))
+}
+
+func TestDeferStack() {
+	p := []int{2, 3, 5, 7, 11, 13}
+	fmt.Println("p[0] = ", p[0])
+	p[0] = 1
+	fmt.Println("p[0] = ", p[0])
+	var a [10]int
+	a[0] = 1
+	fmt.Println("a[0] = ", a[0])
+
+	fmt.Println("counting")
+
+	for i := 0; i < 10; i++ {
+		defer fmt.Println(i)
+	}
+
+	fmt.Println("done")
+}
+
+func TestConvert() {
+	const s1 = `hello go`
+	b := 13
+	s := strconv.Itoa(b)
+	fmt.Println("s = ", s)
+	c, err := strconv.ParseInt(s, 10, 32)
+	if err != nil {
+		fmt.Println("err = ", err)
+	}
+	fmt.Printf("%T \n", c)
+	os := runtime.GOOS
+	fmt.Println("os = ", os)
+}
+
+func TestVar() {
+	var i int
+	fmt.Println(i, c, python, java)
+}
+
+func split(sum int) (x, y int) {
+	x = sum * 4 / 9
+	y = sum - x
+	return
+}
+
+func TestSwap() {
+	a := "hello"
+	b := "word"
+	fmt.Println("a = ", a, ", b = ", b)
+	a, b = SwapString(a, b)
+	fmt.Println("a = ", a, ", b = ", b)
+}
+
+func SwapString(a, b string) (string, string) {
+	return b, a
 }
 
 func TestHttpClient() {
