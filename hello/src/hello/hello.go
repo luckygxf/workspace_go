@@ -20,10 +20,34 @@ var waitGroup sync.WaitGroup
 var c, python, java bool
 
 func main() {
-	xiaohui := &Dog{}
-	xiaohui.Age = 15
-	xiaohui.Name = "xiaohui"
-	fmt.Println("xiaohui: ", *xiaohui)
+	TestInterface()
+}
+
+func TestInterface() {
+	var phone Phone
+	phone = new(NokiaPhone)
+	phone.call()
+
+	phone = new(IPhone)
+	phone.call()
+}
+
+type Phone interface {
+	call()
+}
+
+type NokiaPhone struct {
+}
+
+func (nokiaPhone *NokiaPhone) call() {
+	fmt.Println("nokiaPhone call")
+}
+
+type IPhone struct {
+}
+
+func (iphone *IPhone) call() {
+	fmt.Println("iphone call")
 }
 
 type Annimal struct {
